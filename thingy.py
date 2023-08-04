@@ -1,5 +1,7 @@
 from flask import Flask, request, send_from_directory, Response
 from PyPDF2 import PdfReader, PdfWriter
+from werkzeug.utils import secure_filename
+import tempfile
 import os
 
 UPLOAD_FOLDER = 'uploads'
@@ -19,23 +21,35 @@ def home():
 @app.route('/upload', methods=['POST'])
 def upload_files():
     files = request.files.getlist('file')
-    file_order = request.form.get('fileOrder')  # Retrieve the file order from the form data
+    file_order = request.form.get('fileOrder')
     file_order = [int(index) for index in file_order.split(',')] if file_order else range(len(files))
 
     pdf_writer = PdfWriter()
 
-    for index in file_order:  # Iterate through the files in the specified order
-        file = files[index]
-        if file.filename.endswith('.pdf'):
-            pdf_reader = PdfReader(file)
-            for page_num in range(len(pdf_reader.pages)):
-                pdf_writer.add_page(pdf_reader.pages[page_num])  # Using reader.pages[page_number]
+    try:
+        for index in file_order:
+            file = files[index]
+            if file.filename.endswith('.pdf') and file.content_length <= MAX_FILE_SIZE:
+                pdf_reader = PdfReader(file)
+                for page_num in range(len(pdf_reader.pages)):
+                    pdf_writer.add_page(pdf_reader.pages[page_num])
+            else:
+                return Response('Invalid file or file size exceeded', status=400)
 
-    merged_pdf_path = os.path.join(UPLOAD_FOLDER, 'merged.pdf')
-    with open(merged_pdf_path, 'wb') as merged_file:
+        # Create a temporary file for the merged PDF
+        merged_file = tempfile.NamedTemporaryFile(delete=False)
         pdf_writer.write(merged_file)
+        merged_file.close()
 
-    return send_from_directory(UPLOAD_FOLDER, 'merged.pdf')
+        return send_file(merged_file.name, as_attachment=True, attachment_filename='merged.pdf', mimetype='application/pdf')
+
+    except Exception as e:
+        return Response(str(e), status=500)
+
+    finally:
+        # Cleanup: Remove temporary merged file
+        if merged_file:
+            os.unlink(merged_file.name)
 
 
 if __name__ == '__main__':
