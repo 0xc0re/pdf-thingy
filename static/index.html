@@ -4,24 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Merger</title>
-    <!-- Materialize CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- jQuery UI for drag-and-drop sorting -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- Custom CSS -->
     <style>
         body, html {
             height: 100%;
-        }
-        .center-container {
-            height: 90%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .card {
-            min-height: 400px; /* Minimum height for the card */
-            
         }
         #pdfList {
             list-style-type: none;
@@ -32,41 +22,39 @@
             margin: 5px;
             border: 1px solid #ddd;
             cursor: grab;
+            word-break: break-word; /* Prevent overflow on small screens */
         }
     </style>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <!-- jQuery UI -->
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <!-- Materialize JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
-<body>
-    <div class="container center-container">
+<body class="d-flex justify-content-center align-items-center" style="height: 100%;">
+    <div class="container">
         <div class="row">
-            <div class="col s12">
+            <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
                 <div class="card">
-                    <div class="card-content">
-                        <span class="card-title center-align">PDF Merger</span>
+                    <div class="card-body">
+                        <h5 class="card-title text-center">PDF Merger</h5>
+                        <a id="github-link" href="https://github.com/0xc0re/pdf-thingy" class="text-decoration-none d-block text-center mb-3"
+                            target="_blank">GitHub Project</a>
                         <form id="uploadForm">
-                            <div class="file-field input-field">
-                                <div class="btn">
-                                    <span>Select PDF</span>
-                                    <input type="file" id="pdfFiles" name="file" accept="application/pdf" multiple>
-                                </div>
-                                <div class="file-path-wrapper">
-                                    <input class="file-path validate" type="text" placeholder="PDF files">
-                                </div>
+                            <div class="custom-file mb-3">
+                                <input type="file" class="custom-file-input" id="pdfFiles" name="file" accept="application/pdf" multiple>
+                                <label class="custom-file-label" for="pdfFiles">Choose PDF files</label>
                             </div>
                             <input type="hidden" id="fileOrder" name="fileOrder" value=""> <!-- Hidden input to store file order -->
                             <ul id="pdfList"></ul>
-                            <div class="center-align mt-3">
-                                <button type="submit" class="btn waves-effect waves-light">Merge and Upload</button>
+                            <div class="text-center mt-3">
+                                <button type="submit" class="btn btn-primary">Merge and Upload</button>
                             </div>
                         </form>
                         <div id="message" class="mt-3"></div>
-                        <div class="center-align">
-                            <a href="#" id="downloadLink" class="btn waves-effect waves-light mt-3" style="display:none;">Download Merged PDF</a>
+                        <div class="text-center">
+                            <a href="#" id="downloadLink" class="btn btn-success mt-3" style="display:none;">Download Merged PDF</a>
                         </div>
                     </div>
                 </div>
