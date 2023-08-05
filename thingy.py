@@ -5,12 +5,9 @@ import uuid
 import shutil
 import json
 
-# Load the configuration from the JSON file
-with open('config.json') as config_file:
-    config = json.load(config_file)
-
-UPLOAD_FOLDER = config['upload_folder']
-MAX_FILE_SIZE_MB = config['max_file_size']  # In megabytes
+# Load the configuration from environment variables
+UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'default_upload_folder')  # Default to 'default_upload_folder'
+MAX_FILE_SIZE_MB = int(os.getenv('MAX_FILE_SIZE', '2'))  # Default to 2MB
 MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024  # Convert to bytes
 
 # Ensure the upload folder exists
