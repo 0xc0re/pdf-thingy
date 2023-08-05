@@ -3,9 +3,15 @@ from PyPDF2 import PdfReader, PdfWriter
 import os
 import uuid
 import shutil
+import json
 
-UPLOAD_FOLDER = 'uploads'
-MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
+# Load the configuration from the JSON file
+with open('config.json') as config_file:
+    config = json.load(config_file)
+
+UPLOAD_FOLDER = config['upload_folder']
+MAX_FILE_SIZE_MB = config['max_file_size']  # In megabytes
+MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024  # Convert to bytes
 
 # Ensure the upload folder exists
 if not os.path.exists(UPLOAD_FOLDER):
@@ -13,6 +19,8 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE_BYTES  # Set the maximum file size in bytes
+
 
 @app.route('/')
 def home():
