@@ -92,6 +92,13 @@
 
         $('#uploadForm').submit(function(e) {
             e.preventDefault();
+
+            var files = $('#pdfFiles')[0].files;
+            if (files.length === 0) {
+                $('#message').html('<div class="red-text text-darken-2">Please select at least one PDF file to merge.</div>');
+                return false; // Prevent submission if no files are selected
+            }
+
             var formData = new FormData(this);
             $('#message').html('<div class="progress"><div class="indeterminate"></div></div>');
             $('#downloadLink').hide();
@@ -111,13 +118,14 @@
                     $('#downloadLink').attr('href', url);
                     $('#downloadLink').attr('download', 'merged.pdf'); // set download attribute
                     $('#downloadLink').show();
-                    $('#message').html('<div class="green-text text-darken-2">PDFs merged successfully!</div>');
+                    $('#message').html('<div class="text-success">PDFs merged successfully!</div>');
                 },
                 error: function(xhr) {
-                    $('#message').html('<div class="red-text text-darken-2">Error: ' + xhr.responseText + '</div>');
+                    $('#message').html('<div class="text-danger">Error: ' + xhr.responseText + '</div>');
                 }
             });
         });
+
     </script>
 </body>
 </html>
