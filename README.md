@@ -1,8 +1,8 @@
 
-# Image Thingy
+# PDF Thingy
 
 ## Description
-This project is a Flask-based web application that allows users to upload an image and have it duplicated 4 times on the same page.
+This project is a Flask-based web application that allows users to upload PDF's and have them all combined and returned.
 
 ## Installation
 1. Clone the repository.
